@@ -48,7 +48,11 @@ function render(){const s=slides[current];let accents=new Set(s.a||[]);if(s.c.le
 function go(n){current=(current+n+slides.length)%slides.length;render()}
 document.querySelector('#previous').onclick=()=>go(-1);
 document.querySelector('#next').onclick=()=>go(1);
-window.addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();go(1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}});
+const fullscreen=document.querySelector('#fullscreen');
+async function toggleFullscreen(){if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}
+fullscreen.onclick=()=>toggleFullscreen();
+document.addEventListener('fullscreenchange',()=>{fullscreen.textContent=document.fullscreenElement?'⛶':'⛶';fullscreen.setAttribute('aria-label',document.fullscreenElement?'Esci da schermo intero':'Schermo intero');});
+window.addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();go(1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}if(e.key.toLowerCase()==='f'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){e.preventDefault();toggleFullscreen()}});
 window.addEventListener('hashchange',()=>{const n=Number.parseInt(location.hash.replace('#slide-',''),10);if(Number.isInteger(n)&&n>=1&&n<=slides.length&&n-1!==current){current=n-1;render()}});
 let start=0;
 window.addEventListener('touchstart',e=>start=e.changedTouches[0].screenX,{passive:true});
