@@ -28,10 +28,10 @@ const slides=[
   {c:['GAMMA','E GEX'],a:[0,1],title:1},
   {c:['QUANDO IL DEALER COMPRA E VENDE…','AIUTA A FERMARE IL PREZZO,','O LO SPINGE PIÙ FORTE?'],a:[1,2],size:S},
   {c:['QUELLA RISPOSTA','SI CHIAMA GAMMA.','PENSIAMO AL PREZZO','COME A UNA PALLA.'],a:[1,3],size:S,v:'gamma-positive-bowl.png'},
-  {c:['GAMMA POSITIVO =','PALLA DENTRO UNA CIOTOLA.','LA SPINGI A DESTRA: TORNA AL CENTRO.','LA SPINGI A SINISTRA: TORNA AL CENTRO.'],a:[0,1],size:S,v:'gamma-positive-bowl.png'},
+  {c:['GAMMA POSITIVO =','PALLA DENTRO UNA CIOTOLA.','LA SPINGI A DESTRA: TORNA AL CENTRO.','LA SPINGI A SINISTRA: TORNA AL CENTRO.'],a:[0,1],green:[0],size:S,v:'gamma-positive-bowl.png'},
   {c:['PERCHÉ? IL DEALER FA','IL CONTRARIO DEL PREZZO:','IL PREZZO SALE: LUI VENDE.','IL PREZZO SCENDE: LUI COMPRA.'],a:[1,2,3],size:S,v:'gamma-positive-bowl.png'},
   {c:['LUI È IL BORDO DELLA CIOTOLA.','TI TIRA SEMPRE INDIETRO.','GIORNO FERMO. CHOP. RANGE. NOIA.'],a:[0,1],size:S,v:'gamma-positive-bowl.png'},
-  {c:['GAMMA NEGATIVO =','METTI LA STESSA PALLA','IN CIMA A UNA COLLINA.','SE NON LA TOCCHI, STA LÌ.','NON CADE DA SOLA.'],a:[0,1,2],size:S,v:'gamma-negative-hill.png'},
+  {c:['GAMMA NEGATIVO =','METTI LA STESSA PALLA','IN CIMA A UNA COLLINA.','SE NON LA TOCCHI, STA LÌ.','NON CADE DA SOLA.'],a:[0,1,2],red:[0],size:S,v:'gamma-negative-hill.png'},
   {c:['MA SE LA SPINGI UN PO’,','IN UN ATTIMO PRENDE VELOCITÀ.'],a:[0,1],title:1,v:'gamma-negative-hill.png'},
   {c:['PERCHÉ? IL DEALER FA','LA STESSA COSA DEL PREZZO:','IL PREZZO SALE: LUI COMPRA ANCORA.','IL PREZZO SCENDE: LUI VENDE ANCORA.','LUI NON PARTE.','SPINGE QUELLO CHE È GIÀ PARTITO.'],a:[1,2,3,5],size:T,v:'gamma-negative-hill.png'},
   {c:['NON ACCENDE IL FUOCO,','MA SE SCOPPIA L’INCENDIO,','LONG O SHORT,','BUTTA ANCORA PIÙ BENZINA.'],a:[0,3],size:S,v:'fire-fuel.png'},
@@ -44,7 +44,7 @@ const slides=[
 const deck=document.querySelector('#deck');
 const startSlide=Number.parseInt(location.hash.replace('#slide-',''),10);
 let current=Number.isInteger(startSlide)&&startSlide>=1&&startSlide<=slides.length?startSlide-1:0;
-function render(){const s=slides[current];let accents=new Set(s.a||[]);if(s.c.length>1&&accents.size===s.c.length)accents=new Set(s.c.map((_,n)=>n).filter(n=>n%2===1));deck.innerHTML=`<section class="slide active ${s.v?'visual':''} ${s.title?'title':''}" ${s.v?`style="--visual:url('assets/${s.v}')"`:''}><div class="copy">${s.c.map((line,n)=>`<p class="line ${accents.has(n)?A:''} ${s.size||''}">${line}</p>`).join('')}</div><div class="logos"><img src="assets/emblema-trasparente.png" alt="Scalping Open Flow"><img src="assets/logo-large-trader.png" alt="Large Trader"></div></section>`;document.querySelector('#counter').textContent=`${current+1} / ${slides.length}`;history.replaceState(null,'',`#slide-${current+1}`)}
+function render(){const s=slides[current];let accents=new Set(s.a||[]);if(s.c.length>1&&accents.size===s.c.length)accents=new Set(s.c.map((_,n)=>n).filter(n=>n%2===1));deck.innerHTML=`<section class="slide active ${s.v?'visual':''} ${s.title?'title':''}" ${s.v?`style="--visual:url('assets/${s.v}')"`:''}><div class="copy">${s.c.map((line,n)=>`<p class="line ${accents.has(n)?A:''} ${(s.green||[]).includes(n)?'positive':''} ${(s.red||[]).includes(n)?'negative':''} ${s.size||''}">${line}</p>`).join('')}</div><div class="logos"><img src="assets/emblema-trasparente.png" alt="Scalping Open Flow"><img src="assets/logo-large-trader.png" alt="Large Trader"></div></section>`;document.querySelector('#counter').textContent=`${current+1} / ${slides.length}`;history.replaceState(null,'',`#slide-${current+1}`)}
 function go(n){current=(current+n+slides.length)%slides.length;render()}
 document.querySelector('#previous').onclick=()=>go(-1);
 document.querySelector('#next').onclick=()=>go(1);
