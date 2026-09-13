@@ -44,7 +44,7 @@ const slides=[
 const deck=document.querySelector('#deck');
 const startSlide=Number.parseInt(location.hash.replace('#slide-',''),10);
 let current=Number.isInteger(startSlide)&&startSlide>=1&&startSlide<=slides.length?startSlide-1:0;
-function render(){const s=slides[current];deck.innerHTML=`<section class="slide active ${s.v?'visual':''} ${s.title?'title':''}" ${s.v?`style="--visual:url('assets/${s.v}')"`:''}><div class="copy">${s.c.map((line,n)=>`<p class="line ${(s.a||[]).includes(n)?A:''} ${s.size||''}">${line}</p>`).join('')}</div><div class="logos"><img src="assets/emblema-trasparente.png" alt="Scalping Open Flow"><img src="assets/logo-large-trader.png" alt="Large Trader"></div></section>`;document.querySelector('#counter').textContent=`${current+1} / ${slides.length}`;history.replaceState(null,'',`#slide-${current+1}`)}
+function render(){const s=slides[current];let accents=new Set(s.a||[]);if(s.c.length>1&&accents.size===s.c.length)accents=new Set(s.c.map((_,n)=>n).filter(n=>n%2===1));deck.innerHTML=`<section class="slide active ${s.v?'visual':''} ${s.title?'title':''}" ${s.v?`style="--visual:url('assets/${s.v}')"`:''}><div class="copy">${s.c.map((line,n)=>`<p class="line ${accents.has(n)?A:''} ${s.size||''}">${line}</p>`).join('')}</div><div class="logos"><img src="assets/emblema-trasparente.png" alt="Scalping Open Flow"><img src="assets/logo-large-trader.png" alt="Large Trader"></div></section>`;document.querySelector('#counter').textContent=`${current+1} / ${slides.length}`;history.replaceState(null,'',`#slide-${current+1}`)}
 function go(n){current=(current+n+slides.length)%slides.length;render()}
 document.querySelector('#previous').onclick=()=>go(-1);
 document.querySelector('#next').onclick=()=>go(1);
